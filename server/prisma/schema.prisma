@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model devices {
+  id            String      @id @default(uuid())
+  anlagenID     String?
+  seriennr      String?
+  gehortzu      String?
+  anlagenbez    String?
+  typModell     String?
+  hersteller    String?
+  lieferant     String?
+  servicestelle String?
+  abteilung     String?
+  kostenstelle  String?
+  SLA           String?
+  preisProSLA   String?
+  status        String?
+  raumbezMT     String?
+  contact       String?
+  date          String?
+  email         String?
+  telephone     String?
+  companyName   String?
+  isRequested   Boolean?
+  isDone        Boolean?
+  images        images[]
+  reminders     reminders[]
+  notes         notes[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model images {
+  id        String   @id @default(uuid())
+  devices   devices? @relation(fields: [deviceId], references: [id])
+  deviceId  String?
+  imageURL  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model notes {
+  id        String   @id @default(uuid())
+  title     String?
+  content   String
+  devices   devices? @relation(fields: [deviceId], references: [id])
+  deviceId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model reminders {
+  id        String   @id @default(uuid())
+  time      String
+  message   String?
+  isComing  Boolean
+  devices   devices? @relation(fields: [deviceId], references: [id])
+  deviceId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model files {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model appNote {
+  id        String   @id @default(uuid())
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
